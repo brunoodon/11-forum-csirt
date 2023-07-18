@@ -1,0 +1,285 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMDoWvLSe7He6bcQi94Pb+m",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/brunoodon/11-forum-csirt/blob/main/MVP_SprintII_(B)\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# MVP - Machine Learning & Analytics - Sprint II(B)\n",
+        "### Bruno Odon\n",
+        "\n",
+        "## Descrição do problema"
+      ],
+      "metadata": {
+        "id": "YGGMNeC0_pDh"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Instalando as bibliotecas TensorFlow e Keras"
+      ],
+      "metadata": {
+        "id": "ZOLSS9uihS2v"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install tensorflow\n",
+        "!pip install keras"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "FJ8EOlz4_w_B",
+        "outputId": "bbf1c790-2707-41e6-adb6-abcdafd24b42"
+      },
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: tensorflow in /usr/local/lib/python3.10/dist-packages (2.12.0)\n",
+            "Requirement already satisfied: absl-py>=1.0.0 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (1.4.0)\n",
+            "Requirement already satisfied: astunparse>=1.6.0 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (1.6.3)\n",
+            "Requirement already satisfied: flatbuffers>=2.0 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (23.5.26)\n",
+            "Requirement already satisfied: gast<=0.4.0,>=0.2.1 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (0.4.0)\n",
+            "Requirement already satisfied: google-pasta>=0.1.1 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (0.2.0)\n",
+            "Requirement already satisfied: grpcio<2.0,>=1.24.3 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (1.56.0)\n",
+            "Requirement already satisfied: h5py>=2.9.0 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (3.8.0)\n",
+            "Requirement already satisfied: jax>=0.3.15 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (0.4.13)\n",
+            "Requirement already satisfied: keras<2.13,>=2.12.0 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (2.12.0)\n",
+            "Requirement already satisfied: libclang>=13.0.0 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (16.0.0)\n",
+            "Requirement already satisfied: numpy<1.24,>=1.22 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (1.22.4)\n",
+            "Requirement already satisfied: opt-einsum>=2.3.2 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (3.3.0)\n",
+            "Requirement already satisfied: packaging in /usr/local/lib/python3.10/dist-packages (from tensorflow) (23.1)\n",
+            "Requirement already satisfied: protobuf!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,<5.0.0dev,>=3.20.3 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (3.20.3)\n",
+            "Requirement already satisfied: setuptools in /usr/local/lib/python3.10/dist-packages (from tensorflow) (67.7.2)\n",
+            "Requirement already satisfied: six>=1.12.0 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (1.16.0)\n",
+            "Requirement already satisfied: tensorboard<2.13,>=2.12 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (2.12.3)\n",
+            "Requirement already satisfied: tensorflow-estimator<2.13,>=2.12.0 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (2.12.0)\n",
+            "Requirement already satisfied: termcolor>=1.1.0 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (2.3.0)\n",
+            "Requirement already satisfied: typing-extensions>=3.6.6 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (4.7.1)\n",
+            "Requirement already satisfied: wrapt<1.15,>=1.11.0 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (1.14.1)\n",
+            "Requirement already satisfied: tensorflow-io-gcs-filesystem>=0.23.1 in /usr/local/lib/python3.10/dist-packages (from tensorflow) (0.32.0)\n",
+            "Requirement already satisfied: wheel<1.0,>=0.23.0 in /usr/local/lib/python3.10/dist-packages (from astunparse>=1.6.0->tensorflow) (0.40.0)\n",
+            "Requirement already satisfied: ml-dtypes>=0.1.0 in /usr/local/lib/python3.10/dist-packages (from jax>=0.3.15->tensorflow) (0.2.0)\n",
+            "Requirement already satisfied: scipy>=1.7 in /usr/local/lib/python3.10/dist-packages (from jax>=0.3.15->tensorflow) (1.10.1)\n",
+            "Requirement already satisfied: google-auth<3,>=1.6.3 in /usr/local/lib/python3.10/dist-packages (from tensorboard<2.13,>=2.12->tensorflow) (2.17.3)\n",
+            "Requirement already satisfied: google-auth-oauthlib<1.1,>=0.5 in /usr/local/lib/python3.10/dist-packages (from tensorboard<2.13,>=2.12->tensorflow) (1.0.0)\n",
+            "Requirement already satisfied: markdown>=2.6.8 in /usr/local/lib/python3.10/dist-packages (from tensorboard<2.13,>=2.12->tensorflow) (3.4.3)\n",
+            "Requirement already satisfied: requests<3,>=2.21.0 in /usr/local/lib/python3.10/dist-packages (from tensorboard<2.13,>=2.12->tensorflow) (2.27.1)\n",
+            "Requirement already satisfied: tensorboard-data-server<0.8.0,>=0.7.0 in /usr/local/lib/python3.10/dist-packages (from tensorboard<2.13,>=2.12->tensorflow) (0.7.1)\n",
+            "Requirement already satisfied: werkzeug>=1.0.1 in /usr/local/lib/python3.10/dist-packages (from tensorboard<2.13,>=2.12->tensorflow) (2.3.6)\n",
+            "Requirement already satisfied: cachetools<6.0,>=2.0.0 in /usr/local/lib/python3.10/dist-packages (from google-auth<3,>=1.6.3->tensorboard<2.13,>=2.12->tensorflow) (5.3.1)\n",
+            "Requirement already satisfied: pyasn1-modules>=0.2.1 in /usr/local/lib/python3.10/dist-packages (from google-auth<3,>=1.6.3->tensorboard<2.13,>=2.12->tensorflow) (0.3.0)\n",
+            "Requirement already satisfied: rsa<5,>=3.1.4 in /usr/local/lib/python3.10/dist-packages (from google-auth<3,>=1.6.3->tensorboard<2.13,>=2.12->tensorflow) (4.9)\n",
+            "Requirement already satisfied: requests-oauthlib>=0.7.0 in /usr/local/lib/python3.10/dist-packages (from google-auth-oauthlib<1.1,>=0.5->tensorboard<2.13,>=2.12->tensorflow) (1.3.1)\n",
+            "Requirement already satisfied: urllib3<1.27,>=1.21.1 in /usr/local/lib/python3.10/dist-packages (from requests<3,>=2.21.0->tensorboard<2.13,>=2.12->tensorflow) (1.26.16)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.10/dist-packages (from requests<3,>=2.21.0->tensorboard<2.13,>=2.12->tensorflow) (2023.5.7)\n",
+            "Requirement already satisfied: charset-normalizer~=2.0.0 in /usr/local/lib/python3.10/dist-packages (from requests<3,>=2.21.0->tensorboard<2.13,>=2.12->tensorflow) (2.0.12)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.10/dist-packages (from requests<3,>=2.21.0->tensorboard<2.13,>=2.12->tensorflow) (3.4)\n",
+            "Requirement already satisfied: MarkupSafe>=2.1.1 in /usr/local/lib/python3.10/dist-packages (from werkzeug>=1.0.1->tensorboard<2.13,>=2.12->tensorflow) (2.1.3)\n",
+            "Requirement already satisfied: pyasn1<0.6.0,>=0.4.6 in /usr/local/lib/python3.10/dist-packages (from pyasn1-modules>=0.2.1->google-auth<3,>=1.6.3->tensorboard<2.13,>=2.12->tensorflow) (0.5.0)\n",
+            "Requirement already satisfied: oauthlib>=3.0.0 in /usr/local/lib/python3.10/dist-packages (from requests-oauthlib>=0.7.0->google-auth-oauthlib<1.1,>=0.5->tensorboard<2.13,>=2.12->tensorflow) (3.2.2)\n",
+            "Requirement already satisfied: keras in /usr/local/lib/python3.10/dist-packages (2.12.0)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import tensorflow as tf\n",
+        "import sklearn.metrics as skm\n",
+        "from tensorflow import keras\n",
+        "from tensorflow.keras.preprocessing.image import ImageDataGenerator\n",
+        "from tensorflow.keras.preprocessing import image\n",
+        "from IPython.display import Image, display\n",
+        "from datetime import datetime\n",
+        "from sklearn.metrics import confusion_matrix, classification_report\n",
+        "import itertools\n",
+        "import numpy as np\n",
+        "import matplotlib.pyplot as plt"
+      ],
+      "metadata": {
+        "id": "VlizTKOhhx4S"
+      },
+      "execution_count": 3,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def plot_confusion_matrix(cm, classes,\n",
+        "                          normalize=False,\n",
+        "                          title='Confusion matrix',\n",
+        "                          cmap=plt.cm.Blues):\n",
+        "    \"\"\"\n",
+        "    Esta função imprime e plota a matriz de confusão.\n",
+        "    A normalização pode ser aplicada definindo `normalize=True`.\n",
+        "    \"\"\"\n",
+        "    if normalize:\n",
+        "        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]\n",
+        "        print(\"Matriz de confusão normalizada\")\n",
+        "    else:\n",
+        "        print('Matriz de confusão sem normalização')\n",
+        "\n",
+        "    plt.imshow(cm, interpolation='nearest', cmap=cmap)\n",
+        "    plt.title(title)\n",
+        "    plt.colorbar()\n",
+        "    tick_marks = np.arange(len(classes))\n",
+        "    plt.xticks(tick_marks, classes, rotation=45)\n",
+        "    plt.yticks(tick_marks, classes)\n",
+        "\n",
+        "    fmt = '.2f' if normalize else 'd'\n",
+        "    thresh = cm.max() / 2.\n",
+        "    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):\n",
+        "        plt.text(j, i, format(cm[i, j], fmt),\n",
+        "                 horizontalalignment=\"center\",\n",
+        "                 color=\"white\" if cm[i, j] > thresh else \"black\")\n",
+        "\n",
+        "    plt.tight_layout()\n",
+        "    plt.ylabel('Label real')\n",
+        "    plt.xlabel('Label predito')"
+      ],
+      "metadata": {
+        "id": "aMpiVu4tiDVH"
+      },
+      "execution_count": 4,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!mkdir -pv /content/datasets/anime/{train,val,test}"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "OkU4MEmKijAP",
+        "outputId": "311e76ce-c8c7-49d6-d3ac-520f82768efc"
+      },
+      "execution_count": 10,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "mkdir: created directory '/content/datasets'\n",
+            "mkdir: created directory '/content/datasets/anime'\n",
+            "mkdir: created directory '/content/datasets/anime/train'\n",
+            "mkdir: created directory '/content/datasets/anime/val'\n",
+            "mkdir: created directory '/content/datasets/anime/test'\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train_dir = 'datasets/anime/train'\n",
+        "val_dir = 'datasets/anime/val'\n",
+        "test_dir = 'datasets/anime/test'"
+      ],
+      "metadata": {
+        "id": "C4OTMOb6iNWn"
+      },
+      "execution_count": 5,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "batch_size = 32\n",
+        "img_height = 224\n",
+        "img_width = 224\n",
+        "num_classes = 5"
+      ],
+      "metadata": {
+        "id": "hFrzZeBGiR2_"
+      },
+      "execution_count": 6,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "train_datagen = ImageDataGenerator(rescale=1./255,\n",
+        "                                   shear_range=0.2,\n",
+        "                                   zoom_range=0.2,\n",
+        "                                   horizontal_flip=True)\n",
+        "\n",
+        "val_datagen = ImageDataGenerator(rescale=1./255)\n",
+        "\n",
+        "test_datagen = ImageDataGenerator(rescale=1./255)\n",
+        "\n",
+        "# Criação dos data generators\n",
+        "train_generator = train_datagen.flow_from_directory(train_dir,\n",
+        "                                                    target_size=(img_height, img_width),\n",
+        "                                                    batch_size=batch_size,\n",
+        "                                                    class_mode='categorical') #training set\n",
+        "\n",
+        "val_generator = test_datagen.flow_from_directory(val_dir,\n",
+        "                                                target_size=(img_height, img_width),\n",
+        "                                                batch_size=batch_size,\n",
+        "                                                class_mode='categorical')\n",
+        "\n",
+        "test_generator = test_datagen.flow_from_directory(test_dir,\n",
+        "                                                target_size=(img_height, img_width),\n",
+        "                                                batch_size=batch_size,\n",
+        "                                                class_mode='categorical')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "O7XVR5cljDJf",
+        "outputId": "828a5e02-cb19-4056-8dde-14c87116869f"
+      },
+      "execution_count": 11,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Found 0 images belonging to 0 classes.\n",
+            "Found 0 images belonging to 0 classes.\n",
+            "Found 0 images belonging to 0 classes.\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
